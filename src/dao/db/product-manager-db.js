@@ -32,15 +32,64 @@ class ProductManager {
         return product;
     }
 
-    async getProducts() {
+    async getProducts(limit, page, query, sort) {
         try {
-            const products = await ProductModel.find();
-            return products;
+
+            let criteria = [];
+
+            // Filtro por categoría si se proporciona en query
+            if (query.category) {
+                criteria.push({
+                    $match: {
+                        category: query.category,
+                    }
+                });
+            }
+
+            // Ordenamiento por precio del producto
+            const sortOrder = sort === "asc" ? 1 : -1;
+            criteria.push({
+                $sort: {
+                    price: sortOrder,
+                }
+            });
+
+            // Contar la cantidad total de productos
+            const totalProducts = await ProductModel.countDocuments(criteria[0]?.['$match']);
+
+            // Paginación
+            criteria.push({
+                $skip: (page - 1) * limit,
+            }, {
+                $limit: limit,
+            });
+
+            // Ejecutar la consulta para obtener los productos
+            const products = await ProductModel.aggregate(criteria);
+
+            // Calcular las propiedades de paginación
+            const totalPages = Math.ceil(totalProducts / limit);
+            const hasNextPage = page < totalPages;
+            const hasPrevPage = page > 1;
+
+            return {
+                totalPages,
+                prevPage: hasPrevPage ? page - 1 : null,
+                nextPage: hasNextPage ? page + 1 : null,
+                currentPage: page,
+                hasPrevPage,
+                hasNextPage,
+                docs: products,
+            };
+
         } catch (error) {
             console.log("Error al obtener productos:", error);
-            return error;
+            throw error;
         }
     }
+
+
+
 
     async getProductById(id) {
         try {

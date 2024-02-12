@@ -8,18 +8,41 @@ const productManager = new ProductManager();
 // Devuelve todos los productos o la cantidad de productos que se le pase como limit
 router.get("/", async (req, res) => {
     try {
-        let limit = parseInt(req.query.limit);
-        let page = req.query.page || 1;
-        let sort = req.query.sort;
-        let query = req.query.query;
+        let limit = parseInt(req.query.limit) || 10;
+        let page = parseInt(req.query.page) || 1;
+        let query = req.query.query || "";
+        let sort = req.query.sort || "asc";
+        let title = "Listado de Productos"
 
-        const products = await productManager.getProducts();
+        const products = await productManager.getProducts(limit, page, query, sort);
 
-        if (limit) {
-            res.status(200).send({ status: "success", product: products.slice(0, limit) });
-        } else {
-            res.status(200).send({ status: "success", product: products });
+        if (!products) {
+            res.status(404).send({ status: "error", error: "No se encontraron productos" });
+            return;
         }
+        
+        const result = products.docs.map(product => {
+            const { _id, ...rest } = product;
+            return rest;
+        });
+
+        res.render("index", {
+            status: "success",
+            payload: result,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            currentPage: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: products.hasPrevPage ? `/products?page=${products.prevPage}` : null,
+            nextLink: products.hasNextPage ? `/products?page=${products.nextPage}` : null,
+            limit: limit,
+            page: page,
+            query: query,
+            title: title
+        });
+
     } catch (error) {
         console.log("Error al traer los productos", error);
         res.status(401).send({ status: "error", error: "Error al traer los productos" });
