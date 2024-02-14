@@ -24,9 +24,24 @@ router.get("/:cid", async (req, res) => {
 
     try {
         const cart = await cartManager.getCartById(req.params.cid);
-
+        const products = [];
+        
+        
         if (cart) {
-            res.status(200).send({ status: "Success", cart: cart });
+            cart.products.forEach(product => {
+                products.push(productManager.getProductById(product.product));
+            });
+            await Promise.all(products);
+            console.log(products);            
+
+            res.render("cart", {
+                status: "success",
+                cart: cart,
+                products: products,
+                title: "Carrito",
+                cartInfo: "Esto es un Carrito"
+            });
+
         } else {
             res.status(404).send({ status: "Error", error: "Carrito no encontrado" });
         }
@@ -82,6 +97,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
 
 });
 
+// Elimina todos los productos del carrito dado su ID.
 router.delete("/:cid", async (req, res) => {
     try {
         const cart = await cartManager.emptyCart(req.params.cid);
@@ -97,6 +113,7 @@ router.delete("/:cid", async (req, res) => {
     }
 });
 
+// Elimina un producto del carrito dado su ID de carrito y producto.
 router.delete("/:cid/products/:pid", async (req, res) => {
     try {
         const cart = await cartManager.deleteProductFromCart(req.params.cid, req.params.pid);

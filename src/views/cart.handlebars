@@ -1,0 +1,31 @@
+<h1>{{title}}</h1>
+<h3>{{cartInfo}}</h3>
+<div>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Cantidad</th>
+        <th>Precio Unidad</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+        <tr>
+          <td>{{this.code}}</td>
+          <td>{{this.title}}</td>
+          <td>{{this.description}}</td>
+          <td>{{this.quantity}}</td>
+          <td>{{this.price}}</td>
+          <td>
+            <button class="btnAddToCart" data-product-id="{{this._id}}">Eliminar</button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+    <h4>Total a Pagar:</h4>
+  </table>
+</div>
