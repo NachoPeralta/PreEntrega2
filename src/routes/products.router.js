@@ -70,10 +70,10 @@ router.post("/", async (req, res) => {
 
         const newProduct = await productManager.addProduct(product);
         if (!newProduct) {
-            res.status(401).send({ status: "Error", error: "No se pudo agregar el producto, verifique los datos ingresados" });
+            res.status(400).send({ status: "Error", error: "No se pudo agregar el producto, verifique los datos ingresados" });
             return;
         }
-        res.status(200).send({ status: "Success", product: { newProduct } });
+        res.status(201).send({ status: "Success", product: { newProduct } });
 
     } catch (error) {
         res.status(401).send({ status: "Error", error: "No se pudo agregar el producto" });
