@@ -24,13 +24,7 @@ router.get("/:cid", async (req, res) => {
     try {
         const cart = await cartManager.getCartById(req.params.cid);
 
-        if (cart) {
-            console.log("**************CART*******************");            
-            console.log(cart);
-            console.log("**************PRODUCTS***************");
-            console.log(cart.products);
-            console.log("************************************");
-
+        if (cart) {           
             res.render("cart", {
                 status: "success",
                 cart: cart,
@@ -91,6 +85,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
     }
 
 });
+
 
 // Elimina todos los productos del carrito dado su ID.
 router.delete("/:cid", async (req, res) => {

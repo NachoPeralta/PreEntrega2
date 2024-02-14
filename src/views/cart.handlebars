@@ -15,17 +15,20 @@
     <tbody>
       {{#each products}}
         <tr>
-          <td>{{this}}</td>
+          <td>{{this.product.code}}</td>
           <td>{{this.product.title}}</td>
           <td>{{this.product.description}}</td>
           <td>{{this.quantity}}</td>
           <td>{{this.product.price}}</td>
           <td>
-            <button class="btnDeleteProductFromCart" data-product-id="{{this.product._id}}">Eliminar</button>
+            <button
+              class="btnDeleteProductFromCart"
+              data-product-id="{{this.product._id}}"
+            >Eliminar</button>
           </td>
         </tr>
       {{/each}}
     </tbody>
-    <h4>Total a Pagar:</h4>
   </table>
+  <h4>Total a Pagar:</h4>
 </div>

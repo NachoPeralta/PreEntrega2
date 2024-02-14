@@ -1,7 +1,8 @@
 const express = require("express");
 const productsRouter = require("../routes/products.router");
 const cartRouter = require("../routes/cart.router.js");
-const exphbs = require("express-handlebars");
+const {create} = require('express-handlebars');
+
 const socket = require("socket.io");
 const viewsRouter = require("../routes/views.router.js");
 const path = require("path");
@@ -20,9 +21,15 @@ class Server {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.json());
         
+        const hbs = create({
+            runtimeOptions: {
+              allowProtoPropertiesByDefault: true,
+              allowProtoMethodsByDefault: true
+            }
+          });
 
         // Configuracion de motor de plantilla y handlebars
-        this.app.engine("handlebars", exphbs.engine());
+        this.app.engine("handlebars", hbs.engine);
         this.app.set("view engine", "handlebars");
         this.app.set("views", path.join(__dirname, "../views"));
 

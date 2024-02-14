@@ -36,8 +36,3 @@ socket.on("message", data => {
     log.innerHTML = messages;
 })
 
-
-const btnDeleteProductFromCart = document.getElementById("btnDeleteProductFromCart");
-btnDeleteProductFromCart.addEventListener("click", () => {
-    socket.emit("deleteProductFromCart");
-});
