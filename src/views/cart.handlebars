@@ -15,13 +15,13 @@
     <tbody>
       {{#each products}}
         <tr>
-          <td>{{this.code}}</td>
-          <td>{{this.title}}</td>
-          <td>{{this.description}}</td>
+          <td>{{this}}</td>
+          <td>{{this.product.title}}</td>
+          <td>{{this.product.description}}</td>
           <td>{{this.quantity}}</td>
-          <td>{{this.price}}</td>
+          <td>{{this.product.price}}</td>
           <td>
-            <button class="btnAddToCart" data-product-id="{{this._id}}">Eliminar</button>
+            <button class="btnDeleteProductFromCart" data-product-id="{{this.product._id}}">Eliminar</button>
           </td>
         </tr>
       {{/each}}

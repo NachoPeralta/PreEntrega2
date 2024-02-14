@@ -21,38 +21,33 @@ router.get("/", async (req, res) => {
 
 // Devuelve un carrito por dado su ID
 router.get("/:cid", async (req, res) => {
-
     try {
         const cart = await cartManager.getCartById(req.params.cid);
-        const products = [];
-        
-        
+
         if (cart) {
-            cart.products.forEach(product => {
-                products.push(productManager.getProductById(product.product));
-            });
-            await Promise.all(products);
-            console.log(products);            
+            console.log("**************CART*******************");            
+            console.log(cart);
+            console.log("**************PRODUCTS***************");
+            console.log(cart.products);
+            console.log("************************************");
 
             res.render("cart", {
                 status: "success",
                 cart: cart,
-                products: products,
+                products: cart.products,
                 title: "Carrito",
                 cartInfo: "Esto es un Carrito"
             });
-
         } else {
             res.status(404).send({ status: "Error", error: "Carrito no encontrado" });
         }
-
     } catch (error) {
         console.log(error);
         res.status(401).send({ status: "Error", error: "No se pudo cargar el carrito" });
-        return;
     }
+});
 
-})
+
 
 // Crea un carrito y lo devuelve
 router.post("/", async (req, res) => {
