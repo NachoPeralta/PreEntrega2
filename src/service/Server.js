@@ -36,7 +36,7 @@ class Server {
         // Routing
         this.app.use("/api/products", productsRouter);
         this.app.use("/api/carts", cartRouter);
-        this.app.use("/", viewsRouter);
+        this.app.use("/", productsRouter);
 
         const httpServer = this.app.listen(this.port, () => {
             console.log(`Servidor escuchando en el puerto ${this.port}`);
